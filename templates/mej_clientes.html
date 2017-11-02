@@ -1,0 +1,43 @@
+{% extends "ingreso.html" %}
+
+{% block title %}Mejores Clientes{% endblock %}
+
+{% block page_content %}
+<div class="page-header">    
+    <h1>Mejores CLientes</h1>
+</div>
+
+
+
+<style>
+table {
+    font-family: arial, sans-serif;
+    border: 1px solid black;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid black;
+    text-align: center;
+    padding: 8px;
+}
+</style>
+
+<table>
+    <tr>
+        <th>CLIENTE</th>
+        <th>VALOR</th>
+
+    </tr>
+        {% for result in produc %}
+            <tr>
+                <td>{{ result[1].cliente }}</td>
+                <td>{{ result[0] }}</td>
+            </tr>
+    {% endfor %}
+
+</table>
+
+
+{% endblock %}
+
