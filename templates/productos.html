@@ -5,6 +5,7 @@
 {% block page_content %}
 <div class="page-header">    
     {{ wtf.quick_form(form) }}
+    <a href="/exportar/" style="color: black">Exportar a .CSV</a>
     <u1>
     {% for x in clientes %}
     <li>{{ x }}<a href="/productos/{{ x }}"> Link</a></li>
