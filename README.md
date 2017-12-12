@@ -24,19 +24,23 @@ Farmasoft: Se visualizara nuestra pantalla de bienvenida con nuestros datos.
 
 Ingresar: solicitara Usuario y contraseña para poder ingresar al sitio. Luego que se loguearon, visualizaran automaticamente la pantalla de ULTIMAS VENTAS, con opciones en el marco superior: FARMASOFT, SALIR, ULTIMAS VENTAS, CONSULTAS. Pudiendo cliclear sobre cada una de ellas, segun la busqueda que quiera realizar.
 
+Registrarte: Solicita usuario y contraseña ( 2 veces) para poder crear el usuario. Verifica si el usuario ya se encuentra generado, y en caso que sea afirmativo no procede con el registro.
+
+Cambiar Clave: Una vez que estas logueado, avanzas a la solapa de cambiar Clave y solicita Contraseña nueva y Verificar contraseña ( ambas tienen que ser iguales, sino arroja error). Una vez que finalizas con el cambio de contraseña, automaticamente se deslogea y vuelve automaticamente a la pantalla de ingresar.
+
 Salir: Se deslogueara el usuario logueado.
 
-Ultimas Ventas: En la misma podran visualizar las ultimas ventas que se realizaron.
+Ultimas Ventas: En la misma podran visualizar las ultimas ventas que se realizaron.Con la opcion de poder exportar la consulta en un archivo .CSV
 
-Consultas: Al cliclear la opcion de consultas, se desplazaran las siguientes opciones : ( Productos por clientes, Clientes por producto, Productos mas vendidos, Mejores clientes. 
+Consultas: Al cliclear la opcion de consultas, se desplazaran las siguientes opciones : ( Productos por clientes, Clientes por producto, Productos mas vendidos, Mejores clientes. Con la opcion de poder exportar la consulta en un archivo .CSV
 
-Productos por Cliente: Se visualizara en la pagina, el campo de Ingrese el nombre del cliente, en donde debe ingresar una cantidad minima de 3 caracteres, al cliclear la opcion Buscar, aparecera en pantalla los clientes relacionado a los 3 caracteres ingresados, dando la opcion de cliclear LINK, en donde llevara a mostrar en pantalla el listado de productos por clientes. 
+Productos por Cliente: Se visualizara en la pagina, el campo de Ingrese el nombre del cliente, en donde debe ingresar una cantidad minima de 3 caracteres, al cliclear la opcion Buscar, aparecera en pantalla los clientes relacionado a los 3 caracteres ingresados, dando la opcion de cliclear LINK, en donde llevara a mostrar en pantalla el listado de productos por clientes. Con la opcion de poder exportar la consulta en un archivo .CSV
 
-Clientes por producto: Se visualizara en la pagina, el campo de Ingrese el nombre del producto, en donde debe ingresar una cantidad minima de 3 caracteres, al cliclear la opcion Buscar, aparecera en pantalla los productos relacionado a los 3 caracteres ingresados, dando la opcion de cliclear LINK, en donde llevara a mostrar en pantalla el listado deseado.
+Clientes por producto: Se visualizara en la pagina, el campo de Ingrese el nombre del producto, en donde debe ingresar una cantidad minima de 3 caracteres, al cliclear la opcion Buscar, aparecera en pantalla los productos relacionado a los 3 caracteres ingresados, dando la opcion de cliclear LINK, en donde llevara a mostrar en pantalla el listado deseado. Con la opcion de poder exportar la consulta en un archivo .CSV
 
-Productos mas vendidos: Se visualizara una lista de los productos mas vendidos, la misma se encontrara de mayor a menor.
+Productos mas vendidos: Se visualizara una lista de los productos mas vendidos, la misma se encontrara de mayor a menor. Con la opcion de poder exportar la consulta en un archivo .CSV
 
-Méjores Clientes: Se visualizara una lista de los clientes con mayor compra realizada, la misma se encontrara de mayor a menor.
+Méjores Clientes: Se visualizara una lista de los clientes con mayor compra realizada, la misma se encontrara de mayor a menor. Con la opcion de poder exportar la consulta en un archivo .CSV
 
 # Clases diseñadas
 
@@ -45,6 +49,9 @@ Archivos forms.py contiene las siguientes clases:
 ProductoForm: en esta clase, se genera el formulario para el ingreso de palabra a buscar entre todos los productos
 ClienteForm: en esta clase, se genera el formulario para el ingreso de palabra a buscar entre todos los clientes
 LoginForm: en esta clase, se genera el formulario para el ingreso del sistema
+RegistrarForm: en esta clase, se genera el formulario para registrar usuarios nuevos
+CambiarForm: en esta clase, se genera el formulario para realizar el cambio de contraseña de usuarios existentes.
+
 
 Archivos funciones.py contiene la siguiente Clase:
 Registro: En esta clase, se realiza la generacion de objeto por cada linea, con los atributos: Codigo, cliente, cantidad, precio, producto

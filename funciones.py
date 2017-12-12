@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 import csv 
+import os
+from datetime import datetime
 
 #Validar archivos CSV........
 def validar_archivo(archivo):
@@ -217,10 +219,108 @@ def clientes_vip(registros, cantidad):
     return list_cant
 
 
+#------------------------------------------------------------
+# funcion para buscar si el usuario existe
+
+def existe(usuario):
+    open('usuarios').close()
+    with open('usuarios') as archivo1:
+        for x in archivo1:
+            linea = x.strip().split(',')
+            if usuario == linea[0]:
+                return(True)
+            else:
+                pass
+    archivo1.close()
+    return(False)
+        
+#Funcion para cambiar de clave
+
+def cambiarclave(usuario, nueva_clave):
+    print (usuario)
+    print (nueva_clave)
+    open('usuarios').close()
+    with open('usuarios') as archivo:
+        for x in archivo:
+            linea = x.strip().split(',')
+            if usuario == linea[0]:
+                with open('usuariosn', 'a+') as archivo1:
+                    archivo_csv = csv.writer(archivo1)
+                    registro = [usuario, nueva_clave]
+                    archivo_csv.writerow(registro)
+            else:
+                with open('usuariosn', 'a+') as archivo1:
+                    archivo_csv = csv.writer(archivo1)
+                    registro = [linea[0], linea[1]]
+                    archivo_csv.writerow(registro)
+    os.rename('usuariosn', 'usuarios') 
+
+#Funcion para exportar consultas
+
+def exportar(datos,consulta):
+    nombre = 'consulta.csv'
+
+    with open(nombre, 'w') as archivo1:
+        if consulta == 'vendidos':
+            archivo_csv = csv.writer(archivo1)
+            registro = ['Productos más Vendidos']
+            archivo_csv.writerow(registro)
+            archivo_csv = csv.writer(archivo1)
+            registro = ['CODIGO', 'PRODUCTO', 'CANTIDAD']
+            archivo_csv.writerow(registro)
+            for x in datos:
+                linea = x
+
+                archivo_csv = csv.writer(archivo1)
+                registro = [linea[1].codigo,linea[1].producto,linea[0]]
+                archivo_csv.writerow(registro)
+        elif consulta == 'vips':
+            archivo_csv = csv.writer(archivo1)
+            registro = ['Mejores Clientes']
+            archivo_csv.writerow(registro)
+            archivo_csv = csv.writer(archivo1)
+            registro = ['CLIENTE', 'VALOR']
+            archivo_csv.writerow(registro)
+            for x in datos:
+                linea = x
+
+                archivo_csv = csv.writer(archivo1)
+                registro = [linea[1].cliente,linea[0]]
+                archivo_csv.writerow(registro)
+        elif consulta == 'productos':
+            archivo_csv = csv.writer(archivo1)
+            registro = ['productos por cliente']
+            archivo_csv.writerow(registro)
+            archivo_csv = csv.writer(archivo1)
+            registro = ['CODIGO','PRODUCTO','CLIENTE','CANTIDAD', 'PRECIO']
+            archivo_csv.writerow(registro)
+            for x in datos:
+                linea = x
+
+                archivo_csv = csv.writer(archivo1)
+                registro = [linea.codigo,linea.producto,linea.cliente,linea.cantidad,linea.precio]
+                archivo_csv.writerow(registro)
+        elif consulta == 'clientes':
+            archivo_csv = csv.writer(archivo1)
+            registro = ['Clientes por Productos']
+            archivo_csv.writerow(registro)
+            archivo_csv = csv.writer(archivo1)
+            registro = ['CODIGO','PRODUCTO','CLIENTE','CANTIDAD', 'PRECIO']
+            archivo_csv.writerow(registro)
+            for x in datos:
+                linea = x
+
+                archivo_csv = csv.writer(archivo1)
+                registro = [linea.codigo,linea.producto,linea.cliente,linea.cantidad,linea.precio]
+                archivo_csv.writerow(registro)
 
 
 
 
 
+   
+
+
+    
 
 

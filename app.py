@@ -4,11 +4,12 @@
 
 import csv
 import funciones
-from flask import Flask, render_template, redirect, url_for, flash, session
+from datetime import datetime
+from flask import Flask, render_template, redirect, url_for, flash, session, send_file
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from flask_script import Manager
-from forms import LoginForm, ProductoForm, ClienteForm
+from forms import LoginForm, ProductoForm, ClienteForm, RegistrarForm, CambiarForm
 
 app = Flask(__name__)
 manager = Manager(app)
@@ -44,6 +45,7 @@ def index2():
 @app.route('/ingresar', methods=['GET', 'POST'])
 def ingresar():
     formulario = LoginForm()
+
     if formulario.validate_on_submit():
         with open('usuarios') as archivo:
             archivo_csv = csv.reader(archivo)
@@ -105,6 +107,7 @@ def productos():
                     flash('No se Encontro ningun cliente')
                 elif len(clientes) == 1:
                     cliente_unico = funciones.buscar_cli_o_prod(registros,cliente, None)
+                    funciones.exportar(cliente_unico,'productos')
                     return render_template('productos.html', form = formulario, listar = cliente_unico, cliente= formulario.cliente.data.upper())
                 else:
                     return render_template('productos.html', form = formulario, clientes = clientes)
@@ -120,6 +123,7 @@ def productos2(clientes):
     if 'username' in session:
             cliente = clientes
             cliente_unico = funciones.buscar_cli_o_prod(registros,cliente, None)
+            funciones.exportar(cliente_unico,'productos')
             return render_template('productos2.html', listar = cliente_unico, cliente= cliente)
     else:
         return redirect(url_for('ingresar'))
@@ -141,6 +145,7 @@ def clientes():
                     flash('No se Encontro ningun producto')
                 elif len(productos) == 1:
                     producto_unico = funciones.buscar_cli_o_prod(registros,producto, True)
+                    funciones.exportar(producto_unico,'clientes')
                     return render_template('clientes.html', form = formulario, listar = producto_unico, producto= formulario.producto.data.upper())
                 else:
                     return render_template('clientes.html', form = formulario, productos = productos)
@@ -155,6 +160,7 @@ def clientes2(productos):
     if 'username' in session:
         producto = productos
         producto_unico = funciones.buscar_cli_o_prod(registros,producto, True)
+        funciones.exportar(producto_unico,'clientes')
         return render_template('clientes2.html', listar = producto_unico, producto = producto)
     else:
         return redirect(url_for('ingresar'))
@@ -168,6 +174,7 @@ def mas_vendidos():
     if 'username' in session:
         cantidad = 5
         producto = funciones.mas_vendidos(registros = registros, cantidad=cantidad)
+        funciones.exportar(producto,'vendidos')
         return render_template('prod_vendidos.html', produc = producto)
     else:
         return redirect(url_for('ingresar'))
@@ -180,6 +187,7 @@ def clientes_vip():
     if 'username' in session:
         cantidad = 3
         clientes = funciones.clientes_vip(registros = registros, cantidad=cantidad)
+        funciones.exportar(clientes,'vips')
         return render_template('mej_clientes.html', produc = clientes)
     else:
         return redirect(url_for('ingresar'))
@@ -201,6 +209,59 @@ def error_interno(e):
     else:
         flash('ERROR:500 Error Interno')
         return redirect(url_for('ingresar'))
+
+#-------------------------------------------------------------------
+
+#Agregado para Final
+
+@app.route('/registrar', methods=['GET', 'POST'])
+def registrar():
+    formulario = RegistrarForm()
+    if formulario.validate_on_submit():
+        existe = funciones.existe(formulario.usuario.data)
+        if existe == True:
+            flash('El Usuario ya Existe!!!')
+            return redirect(url_for('registrar'))
+        elif existe == False:
+            if formulario.password.data == formulario.password_check.data:
+                with open('usuarios', 'a+') as archivo:
+                    archivo_csv = csv.writer(archivo)
+                    registro = [formulario.usuario.data, formulario.password.data]
+                    archivo_csv.writerow(registro)
+                flash('Usuario creado correctamente')
+                return redirect(url_for('ingresar'))
+            else:
+                flash('Las passwords deben ser iguales')
+    return render_template('registrar.html', form=formulario,fecha_actual=datetime.utcnow())
+
+
+@app.route('/cambiar', methods=['GET', 'POST'])
+def cambiar():
+    if 'username' in session:
+        formulario = CambiarForm()
+        if formulario.validate_on_submit():
+            if formulario.password.data == formulario.password_check.data:
+                usuario = session['username'] 
+                funciones.cambiarclave(usuario, formulario.password.data)
+                flash('Se cambio con exito la clave')
+                return redirect(url_for('ingresar'))
+            else:
+                flash('Las passwords deben ser iguales')
+                return render_template('cambiar.html', formulario=formulario)
+        return render_template('cambiar.html', formulario=formulario)
+    else:
+        return redirect(url_for('ingresar'))
+
+
+@app.route('/exportar/')
+def export():
+    if 'username' in session:
+        nombre = 'resultado_' + datetime.today().strftime('%Y%m%d_%H%M%S')+ '.csv'
+        return send_file('consulta.csv', as_attachment=True, attachment_filename=nombre, cache_timeout=8)
+    else:
+        return redirect(url_for('ingresar'))
+
+
 
 if __name__ == "__main__":
     # app.run(host='0.0.0.0', debug=True)

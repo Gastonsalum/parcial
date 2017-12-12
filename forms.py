@@ -23,5 +23,18 @@ class LoginForm(FlaskForm):
     password = PasswordField('Contraseña', validators=[Required()])
     enviar = SubmitField('Ingresar')
 
+#------------------------------------------------------------------------
 
+# Clase de formulario para realizar el registro de usuario nuevo
+
+class RegistrarForm(LoginForm):
+    password_check = PasswordField('Verificar Contraseña', validators=[Required()])
+    enviar = SubmitField('Registrarse')
+
+#Clase de formulario para realizar el cambio de contraseña de usuario Existente
+
+class CambiarForm(FlaskForm):
+    password = PasswordField('Contraseña Nueva', validators=[Required()])
+    password_check = PasswordField('Verificar Contraseña', validators=[Required()])
+    enviar = SubmitField('Aceptar')
 
